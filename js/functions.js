@@ -15,7 +15,7 @@ $(function () {
     gardenCtx = gardenCanvas.getContext("2d");
     gardenCtx.globalCompositeOperation = "lighter";
     garden = new Garden(gardenCtx, gardenCanvas);
-	
+
 	$("#content").css("width", $loveHeart.width() + $("#code").width());
 	$("#content").css("height", Math.max($loveHeart.height(), $("#code").height()));
 	$("#content").css("margin-top", Math.max(($window.height() - $("#content").height()) / 2, 10));
@@ -110,13 +110,13 @@ function timeElapse(date){
 	if (seconds < 10) {
 		seconds = "0" + seconds;
 	}
-	var result = "<span class=\"digit\">" + days + "</span> days <span class=\"digit\">" + hours + "</span> hours <span class=\"digit\">" + minutes + "</span> minutes <span class=\"digit\">" + seconds + "</span> seconds"; 
+	var result = "<span class=\"digit\">" + days + "</span> days <span class=\"digit\">" + hours + "</span> hours <span class=\"digit\">" + minutes + "</span> minutes <span class=\"digit\">" + seconds + "</span> seconds";
 	$("#elapseClock").html(result);
 }
 
 function showMessages() {
 	adjustWordsPosition();
-	$('#messages').fadeIn(5000, function() {
+	$('#messages').fadeIn(1000, function() {
 		showLoveU();
 	});
 }
@@ -132,5 +132,47 @@ function adjustCodePosition() {
 }
 
 function showLoveU() {
-	$('#loveu').fadeIn(3000);
+	$('#loveu').fadeIn(3000, function() {
+		// After love message is shown, display the image
+		setTimeout(function() {
+			showImage();
+		}, 1000);
+	});
+}
+
+function showImage() {
+	// Create image container if it doesn't exist
+	if ($('#imageContainer').length === 0) {
+		var imageHtml = '<div id="imageContainer" style="display:none;">' +
+			'<div id="imageOverlay">' +
+				'<div id="imageContent">' +
+					'<div id="closeButton">&times;</div>' +
+					'<img id="camsImage" src="cams.jpeg" alt="Special Moment" />' +
+					'<div id="imageCaption">Happy National Girlfriend\'s Day ❤️</div>' +
+				'</div>' +
+			'</div>' +
+		'</div>';
+		$('body').append(imageHtml);
+
+		// Add click handler for close button
+		$('#closeButton').click(function() {
+			$('#imageContainer').fadeOut(1000);
+		});
+
+		// Add click handler for overlay (clicking outside image)
+		$('#imageOverlay').click(function(e) {
+			if (e.target === this) {
+				$('#imageContainer').fadeOut(1000);
+			}
+		});
+
+		// Add escape key handler
+		$(document).keyup(function(e) {
+			if (e.keyCode === 27) { // ESC key
+				$('#imageContainer').fadeOut(1000);
+			}
+		});
+	}
+
+	$('#imageContainer').fadeIn(2000);
 }
